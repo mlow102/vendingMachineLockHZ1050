@@ -1,18 +1,30 @@
+//This is the code for the vending machine lock system on arduino nano. There are serial write commands intended for serial console debugging.
+//This code is for use with the HZ1050 125k RFID reader, it will not work with the more common MFRC522 module for arduino.
+
 #include <SoftwareSerial.h>
 const int chipSelect = 4;
-long approvedUsers[] = {1597542,16711302,15138400,16711422,16711302,14745088,15138462,15132408,16311936,15138552,10026622,15138558,16317958,14745094,14745118,14745184,15138334,15138430}; //list the ID numbers (decimal) of any card able to open the restocking door
-long approvedDevs[] = {16680568,16711302,15138400,16711422,16711302,14745088,15138462,15132408,16318182,16318104,1560}; //list the ID numbers (decomal) of any card able to open the maintnence door. 
-//one ID card can be on both lists, it just opens the first door, then after 2500 ms, the second door unlocks. 
-int numApprovedUsers = 18; //must be equal to the length of the approvedUsers array.  C doesn't have a way to get the length of an array.
-int numApprovedDevs = 11; //must be equal to the length of the approvedDevs array.
-SoftwareSerial inputData(7, 6); //RX, TX we need to put a TX pin to meet the softwareSerial requirments, but it goes unused. HZ1050 TX connects to pin 7
+//list the ID numbers (decimal) of any card able to open the restocking door. This is the only one currently in use.
+long approvedUsers[] = {1597542,16711302,15138400,16711422,16711302,14745088,15138462,15132408,16311936,15138552,10026622,15138558,16317958,14745094,14745118,14745184,15138334,15138430}; 
+//list the ID numbers (decimal) of any card able to open the maintnence door. This door was never wired up. 
+long approvedDevs[] = {16680568,16711302,15138400,16711422,16711302,14745088,15138462,15132408,16318182,16318104,1560}; 
+//one ID card can be on both lists, it just opens the first door, then after 2500 ms, the second door unlocks, if it is hooked up. 
+
+int numApprovedUsers = 18; //must be equal to the length of the approvedUsers array.  C doesn't have a method to retrieve the length of an array.
+
+int numApprovedDevs = 11; //must be equal to the length of the approvedDevs array. If this number is incorrect, it will read data from neigboring data locations (potentially other access arrays) and give errors.
+
+SoftwareSerial inputData(7, 6); //RX, TX we need to put a TX pin to meet the softwareSerial requirments, but it goes unused. HZ1050 TX pin connects to arduino pin 7
+
 const unsigned long TIMEOUT = 300;  // mS
+
 int frontRelay = 9; //pin for the relay that contols the front (restocking) lock
 int backRelay = 8; //pin for the relay that controls the back (development) lock.
-int openTime = 2000;
+int openTime = 2000; //the time to hold the lock open for after a sucessful card read in milliseconds.
+
 //other variables for the code, no need to change these ever.
 byte count;
 byte backCount;
+
 // the most recent card, zero if none
 unsigned long cardCode;
 boolean isLocked = true;
@@ -101,7 +113,7 @@ void setup()
   // end of setup
 }
 
-//basically executes the other methods in the code when a card enters the reader's range.s
+//basically executes the other methods in the code when a card enters the reader's range.
 void loop()
 {
   // if serial data available, process it
