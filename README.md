@@ -1,4 +1,4 @@
-# vendingLock
+# HZ1050 RFID Door Lock implemented in the SASPX Vending Machine
 Source code and information regarding the lock on the SAS PX vending machine.
 
 
