@@ -4,9 +4,9 @@
 #include <SoftwareSerial.h>
 const int chipSelect = 4;
 //list the ID numbers (decimal) of any card able to open the restocking door. This is the only one currently in use.
-long approvedUsers[] = {1597542,16711302,15138400,16711422,16711302,14745088,15138462,15132408,16311936,15138552,10026622,15138558,16317958,14745094,14745118,14745184,15138334,15138430}; 
+long approvedUsers[] = {**Removed for security reasons, copy these from the manual if authorised**}; 
 //list the ID numbers (decimal) of any card able to open the maintnence door. This door was never wired up. 
-long approvedDevs[] = {16680568,16711302,15138400,16711422,16711302,14745088,15138462,15132408,16318182,16318104,1560}; 
+long approvedDevs[] = {**Removed for security reasons, copy these from the manual if authorised**}; 
 //one ID card can be on both lists, it just opens the first door, then after 2500 ms, the second door unlocks, if it is hooked up. 
 
 int numApprovedUsers = 18; //must be equal to the length of the approvedUsers array.  C doesn't have a method to retrieve the length of an array.
