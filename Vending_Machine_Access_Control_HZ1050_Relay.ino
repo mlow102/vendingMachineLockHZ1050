@@ -1,5 +1,7 @@
-//This is the code for the vending machine lock system on arduino nano. There are serial write commands intended for serial console debugging.
-//This code is for use with the HZ1050 125k RFID reader, it will not work with the more common MFRC522 module for arduino.
+/**Vending Machine RFID Lock Arduino Sketch
+ * For Use with HZ1050 125KHz RFID Reader Module
+ * Created by Matthew Low for the SASPX Vending Machine
+ **/
 
 #include <SoftwareSerial.h>
 const int chipSelect = 4;
@@ -9,19 +11,19 @@ long approvedUsers[] = {**Removed for security reasons, copy these from the manu
 long approvedDevs[] = {**Removed for security reasons, copy these from the manual if authorised**}; 
 //one ID card can be on both lists, it just opens the first door, then after 2500 ms, the second door unlocks, if it is hooked up. 
 
-int numApprovedUsers = 18; //must be equal to the length of the approvedUsers array.  C doesn't have a method to retrieve the length of an array.
+int numApprovedUsers = 18; //must be equal to the length of the approvedUsers array. 
 
-int numApprovedDevs = 11; //must be equal to the length of the approvedDevs array. If this number is incorrect, it will read data from neigboring data locations (potentially other access arrays) and give errors.
+int numApprovedDevs = 11; //must be equal to the length of the approvedDevs array.
 
-SoftwareSerial inputData(7, 6); //RX, TX we need to put a TX pin to meet the softwareSerial requirments, but it goes unused. HZ1050 TX pin connects to arduino pin 7
+SoftwareSerial inputData(7, 6); //RX, TX 
 
-const unsigned long TIMEOUT = 300;  // mS
+const unsigned long TIMEOUT = 300;  //ms
 
 int frontRelay = 9; //pin for the relay that contols the front (restocking) lock
 int backRelay = 8; //pin for the relay that controls the back (development) lock.
-int openTime = 2000; //the time to hold the lock open for after a sucessful card read in milliseconds.
+int openTime = 2000; //the time to hold the lock open for after a sucessful card read in ms.
 
-//other variables for the code, no need to change these ever.
+
 byte count;
 byte backCount;
 
@@ -45,7 +47,7 @@ void processNewCard ()
       delay(openTime);
       digitalWrite(frontRelay, LOW);
    }else{
-    count++; //counts if not matching approvedUsers[i]
+    count++; 
    }
   }
    if(count == numApprovedUsers){
@@ -65,13 +67,13 @@ void processNewCard ()
       delay(openTime);
       digitalWrite(backRelay, LOW);
    }else{
-    backCount++; //counts if not matching approvedUsers[i]
+    backCount++; 
    }
    }
    if(backCount == numApprovedUsers){
    Serial.println("**Access Denied for Back**"); 
    }
-  }  // end of processNewCard
+  } 
 
   //generates the cardCode whenever a card is detected.
 void processIncomingByte (const byte inByte)
